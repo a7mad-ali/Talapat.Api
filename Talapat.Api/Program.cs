@@ -1,6 +1,9 @@
-
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
 using System.Threading.Tasks;
+using Talabat.Core.Entities;
+using Talabat.Core.Repositories.Contract;
+using Talapat.Repository;
 using Talapat.Repository.Data;
 
 namespace Talapat.Api
@@ -23,7 +26,14 @@ namespace Talapat.Api
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             webApplicationBuilder.Services.AddEndpointsApiExplorer();
-            webApplicationBuilder.Services.AddSwaggerGen(); 
+            webApplicationBuilder.Services.AddSwaggerGen();
+
+            //DI
+            //webApplicationBuilder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
+            //webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
+            //webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
+
+            webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             #endregion
 
             var app = webApplicationBuilder.Build();
