@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories.Contract;
+using Talapat.Api.Errors;
+using Talapat.Api.Helpers;
+using Talapat.Api.Middleware;
 using Talapat.Repository;
 using Talapat.Repository.Data;
 
@@ -21,7 +25,7 @@ namespace Talapat.Api
             // register required api services to DI Container
             webApplicationBuilder.Services.AddDbContext<TalabatDbContext>(options =>
             {
-                options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies().UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -34,9 +38,29 @@ namespace Talapat.Api
             //webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
 
             webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-            #endregion
+           //    webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
+            webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
+            webApplicationBuilder.Services.AddAutoMapper(typeof(Program));
+            webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(
+                options =>
+                {
+                    options.InvalidModelStateResponseFactory = ActionContext =>
+                    {
+                        var errors = ActionContext.ModelState
+                            .Where(m => m.Value.Errors.Count > 0)
+                            .SelectMany(e => e.Value.Errors)
+                            .Select(e => e.ErrorMessage)
+                            .ToArray();
+                        var response = new ApiValidationErrorResponse() { ValidationErrors=errors };
+                        return new BadRequestObjectResult(response);
+                       
+                        
+                    };
+                });
 
-            var app = webApplicationBuilder.Build();
+        #endregion
+
+        var app = webApplicationBuilder.Build();
              using var scope = app.Services.CreateScope();
 
             var service = scope.ServiceProvider;
@@ -56,6 +80,8 @@ namespace Talapat.Api
                 logger.LogError(ex, "An error occurred during migration");
             }
             #region Configure Kesteral Middelwares
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
 
             // Configure the HTTP request pipeline.
 
@@ -64,6 +90,7 @@ namespace Talapat.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

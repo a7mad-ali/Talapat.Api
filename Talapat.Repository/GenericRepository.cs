@@ -22,12 +22,15 @@ namespace Talapat.Repository
             _db = _dbContext.Set<T>();
 
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
+
+       
+
+        public async Task<IReadOnlyList<T>> GetAllAsync()
         {
             return await _db.AsNoTracking().ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllWithSpecAsync(ISpecification<T> spec)
+        public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecification<T> spec)
         {
             return await applySpecification(spec).AsNoTracking().ToListAsync();
         }
