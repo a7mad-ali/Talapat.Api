@@ -15,14 +15,16 @@ namespace Talapat.Infrastructure.Helpers.SpacificationsEvaluator
         {
             var query = entryQuery; //dbContext.set<T>
             if (spec.Criteria != null)
-            {
                 query = query.Where(spec.Criteria); //dbContext.set<T>.where(s => s.Id == id)
-            }
+            
             if (spec.OrderBy is not null)
                 query = query.OrderBy(spec.OrderBy);
-            else if (spec.OrderByDesc is not null)   
+            else if (spec.OrderByDesc is not null)
+                query = query.OrderByDescending(spec.OrderByDesc);
+            if (spec.IsPagingEnabled)
+                query = query.Skip(spec.Skip).Take(spec.Take);
 
-                query = spec.Inculdes.Aggregate(query, (currentQuery, includeExpression) => currentQuery.Include(includeExpression));
+            query = spec.Inculdes.Aggregate(query, (currentQuery, includeExpression) => currentQuery.Include(includeExpression));
             //8//dbContext.set<T>.where(s => s.Id == id).Incluse(s => s.Courses ).Include(s => s.Department)
             return query;
         }

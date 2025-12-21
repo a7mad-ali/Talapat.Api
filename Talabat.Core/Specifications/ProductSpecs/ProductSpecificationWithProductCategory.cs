@@ -38,6 +38,8 @@ namespace Talabat.Core.Specifications.ProductSpecs
             {
                 AddOrderBy(p => p.Name);
             }
+
+            ApplyPaging((specParams.pageindex - 1) * specParams.pagesize, specParams.pagesize);
         }
 
        

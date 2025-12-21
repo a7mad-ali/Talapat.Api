@@ -15,6 +15,9 @@ namespace Talabat.Core.Specifications
         public List<Expression<Func<T, object>>> Inculdes { get; set; } //include in my sequence
         public Expression<Func<T, object>>? OrderBy { get; set; } // for orderby 
         public Expression<Func<T, object>>? OrderByDesc { get; set; } // for the orderby descinding
+        public int Take { get; set; }
+        public int Skip { get; set; }
+        public bool IsPagingEnabled { get; set; }
 
     }
 }
