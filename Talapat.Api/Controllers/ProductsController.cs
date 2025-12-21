@@ -39,9 +39,9 @@ namespace Talapat.Api.Controllers
         [ProducesResponseType(typeof(ProductToGetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToGetDto>>> GetProducts(string sort)
+        public async Task<ActionResult<IReadOnlyList<ProductToGetDto>>> GetProducts(string? sort,int? brandId,int? categoryId  )
         {
-            var spec = new ProductSpecificationWithProductCategory(sort);
+            var spec = new ProductSpecificationWithProductCategory(sort,brandId,categoryId);
             var products = await _productsRepository.GetAllWithSpecAsync(spec);
            //return await _productsRepository.GetAllAsync();
             return Ok(_mapper.Map<IEnumerable<Product>, IReadOnlyList<ProductToGetDto>>(products));

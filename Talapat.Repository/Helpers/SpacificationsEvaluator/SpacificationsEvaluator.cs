@@ -20,7 +20,7 @@ namespace Talapat.Infrastructure.Helpers.SpacificationsEvaluator
             }
             if (spec.OrderBy is not null)
                 query = query.OrderBy(spec.OrderBy);
-            else if (spec.OrderByDesc is not null)
+            else if (spec.OrderByDesc is not null)   
 
                 query = spec.Inculdes.Aggregate(query, (currentQuery, includeExpression) => currentQuery.Include(includeExpression));
             //8//dbContext.set<T>.where(s => s.Id == id).Incluse(s => s.Courses ).Include(s => s.Department)
