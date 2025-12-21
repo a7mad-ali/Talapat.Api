@@ -5,22 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
 
-namespace Talabat.Core.Specifications
+namespace Talabat.Core.Specifications.ProductSpecs
 {
     public class ProductSpecificationWithProductCategory : BaseSpecifications<Product>
     {
-        public ProductSpecificationWithProductCategory(string sort,int? brandId ,int? categoryId) 
+        public ProductSpecificationWithProductCategory(ProductSpecParams specParams) 
             : base(p =>
-                            (!brandId.HasValue|| p.BrandId == brandId.Value  )&&
-                            (!categoryId.HasValue || p.CategoryId == categoryId.Value)
+                            (!specParams.BrandId.HasValue|| p.BrandId == specParams.BrandId.Value  )&&
+                            (!specParams.CategoryId.HasValue || p.CategoryId == specParams.CategoryId.Value)
         
         )
         {
             addIncludes();
 
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(specParams.Sort))
             {
-                switch (sort)
+                switch (specParams.Sort)
                 {
                     case "PriceAsc":
                         AddOrderBy(p => p.Price);

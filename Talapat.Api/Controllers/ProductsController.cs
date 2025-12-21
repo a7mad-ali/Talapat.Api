@@ -9,6 +9,7 @@ using AutoMapper;
 using Talapat.Api.DTOs.Product;
 using Microsoft.EntityFrameworkCore;
 using Talapat.Api.Errors;
+using Talabat.Core.Specifications.ProductSpecs;
 
 namespace Talapat.Api.Controllers
 {
@@ -39,9 +40,9 @@ namespace Talapat.Api.Controllers
         [ProducesResponseType(typeof(ProductToGetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToGetDto>>> GetProducts(string? sort,int? brandId,int? categoryId  )
+        public async Task<ActionResult<IReadOnlyList<ProductToGetDto>>> GetProducts([FromQuery]ProductSpecParams specParams )
         {
-            var spec = new ProductSpecificationWithProductCategory(sort,brandId,categoryId);
+            var spec = new ProductSpecificationWithProductCategory(specParams);
             var products = await _productsRepository.GetAllWithSpecAsync(spec);
            //return await _productsRepository.GetAllAsync();
             return Ok(_mapper.Map<IEnumerable<Product>, IReadOnlyList<ProductToGetDto>>(products));
