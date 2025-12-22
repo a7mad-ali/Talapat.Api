@@ -2,20 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Talapat.Repository.Data;
+using Talapat.Infrastructure.Generic_Repository.Data;
 
 #nullable disable
 
-namespace Talapat.Repository.Data.Migrations
+namespace Talapat.Infrastructure.Generic_Repository.Data.Migrations
 {
     [DbContext(typeof(TalabatDbContext))]
-    [Migration("20251025222637_InitialMigrate")]
-    partial class InitialMigrate
+    partial class TalabatDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +37,8 @@ namespace Talapat.Repository.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(180)
-                        .HasColumnType("nvarchar(180)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()

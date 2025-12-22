@@ -2,17 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Talapat.Repository.Data;
+using Talapat.Infrastructure.Generic_Repository.Data;
+
 
 #nullable disable
 
-namespace Talapat.Repository.Data.Migrations
+namespace Talapat.Infrastructure.Generic_Repository.Data.Migrations
 {
     [DbContext(typeof(TalabatDbContext))]
-    partial class TalabatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251026190921_UpdateDescription")]
+    partial class UpdateDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

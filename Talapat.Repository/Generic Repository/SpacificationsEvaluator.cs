@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Talabat.Core.Entities;
 using Talabat.Core.Specifications;
 
-namespace Talapat.Infrastructure.Helpers.SpacificationsEvaluator
+namespace Talapat.Infrastructure.Generic_Repository
 {
     public static class SpecificationsEvaluator<T> where T : BaseEntity
     {

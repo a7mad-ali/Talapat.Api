@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Talapat.Repository.Data.Migrations
+namespace Talapat.Infrastructure.Generic_Repository.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigrate : Migration

@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Talapat.Repository.Data;
+using Talapat.Infrastructure.Generic_Repository.Data;
+
 
 #nullable disable
 
-namespace Talapat.Repository.Data.Migrations
+namespace Talapat.Infrastructure.Generic_Repository.Data.Migrations
 {
     [DbContext(typeof(TalabatDbContext))]
-    [Migration("20251026190921_UpdateDescription")]
-    partial class UpdateDescription
+    [Migration("20251025222637_InitialMigrate")]
+    partial class InitialMigrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,8 +41,8 @@ namespace Talapat.Repository.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
 
                     b.Property<string>("Name")
                         .IsRequired()

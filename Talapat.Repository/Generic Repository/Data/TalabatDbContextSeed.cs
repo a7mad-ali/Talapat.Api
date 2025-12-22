@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
+using Talapat.Infrastructure.Generic_Repository.Data;
 
-namespace Talapat.Repository.Data
+namespace Talapat.Infrastructure.Generic_Repository.Data
 {
     public static class TalabatDbContextSeed
     { 

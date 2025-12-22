@@ -7,8 +7,9 @@ using Talabat.Core.Repositories.Contract;
 using Talapat.Api.Errors;
 using Talapat.Api.Helpers;
 using Talapat.Api.Middleware;
-using Talapat.Repository;
-using Talapat.Repository.Data;
+using Talapat.Infrastructure.Generic_Repository;
+using Talapat.Infrastructure.Generic_Repository.Data;
+
 
 namespace Talapat.Api
 {
