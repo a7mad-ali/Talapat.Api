@@ -10,6 +10,7 @@ using Talapat.Api.DTOs.Product;
 using Microsoft.EntityFrameworkCore;
 using Talapat.Api.Errors;
 using Talabat.Core.Specifications.ProductSpecs;
+using Talapat.Api.Helpers.Pagination;
 
 namespace Talapat.Api.Controllers
 {
@@ -40,17 +41,20 @@ namespace Talapat.Api.Controllers
         [ProducesResponseType(typeof(ProductToGetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToGetDto>>> GetProducts([FromQuery]ProductSpecParams specParams )
+        public async Task<ActionResult<Pagination<ProductToGetDto>>> GetProducts([FromQuery]ProductSpecParams specParams )
         {
             var spec = new ProductSpecificationWithProductCategory(specParams);
             var products = await _productsRepository.GetAllWithSpecAsync(spec);
-           //return await _productsRepository.GetAllAsync();
-            return Ok(_mapper.Map<IEnumerable<Product>, IReadOnlyList<ProductToGetDto>>(products));
+            //return await _productsRepository.GetAllAsync();
+            var data = _mapper.Map<IEnumerable<Product>, IReadOnlyList<ProductToGetDto>>(products);
+            var countSpec = new ProductsWithFilteraionForCountSpecification(specParams);
+            var count = await _productsRepository.GetCountAsync(countSpec);
+            return Ok(new Pagination<ProductToGetDto>(specParams.pageindex,specParams.pagesize ,data, count));
 
 
         }
 
-        // /api/products/id 
+        // /api/products/id     
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductToGetDto>> GetProductById(int id)
         {

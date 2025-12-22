@@ -40,6 +40,11 @@ namespace Talapat.Repository
             return await _db.FindAsync(id);
         }
 
+        public async Task<int> GetCountAsync(ISpecification<T> spec)
+        {
+            return await applySpecification(spec).CountAsync();
+        }
+
         public async Task<T?> GetWithSpecAsync(ISpecification<T> spec)
         {
             return await applySpecification(spec).FirstOrDefaultAsync();
@@ -50,5 +55,6 @@ namespace Talapat.Repository
 
 
         }
+
     }
 }
