@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
+using StackExchange.Redis;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
 using Talabat.Core.Repositories.Contract;
 using Talapat.Api.Errors;
 using Talapat.Api.Helpers;
 using Talapat.Api.Middleware;
+using Talapat.Infrastructure.Basket_Repository;
 using Talapat.Infrastructure.Generic_Repository;
 using Talapat.Infrastructure.Generic_Repository.Data;
 
@@ -28,6 +30,11 @@ namespace Talapat.Api
             {
                 options.UseLazyLoadingProxies().UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            webApplicationBuilder.Services.AddScoped<IConnectionMultiplexer>(c =>
+            {
+                var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
+                return ConnectionMultiplexer.Connect(connection);
+            });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             webApplicationBuilder.Services.AddEndpointsApiExplorer();
@@ -37,9 +44,9 @@ namespace Talapat.Api
             //webApplicationBuilder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
             //webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductBrand>, GenericRepository<ProductBrand>>();
             //webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
-
             webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-           //    webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
+            webApplicationBuilder.Services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
+            //    webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
             webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
             webApplicationBuilder.Services.AddAutoMapper(typeof(Program));
             webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(
