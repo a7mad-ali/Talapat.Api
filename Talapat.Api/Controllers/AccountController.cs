@@ -38,5 +38,26 @@ namespace Talapat.Api.Controllers
 
 
         }
+
+        [HttpPost("Register")]
+        public async Task<ActionResult<UserDto>> Register(RegisterDto model)
+        {
+            var user = new ApplicationUser
+            {
+                DisplayName = model.DisplayName,
+                Email = model.Email,
+                UserName = model.Email.Split('@')[0],
+                PhoneNumber=model.PhoneNumber
+
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded) return BadRequest(new ApiValidationErrorResponse() {ValidationErrors=result.Errors.Select(E =>E.Description)});
+            return Ok(new UserDto
+            {
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Token = "FakeToken"
+            });
+        }
     }
 }
