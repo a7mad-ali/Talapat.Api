@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
 using StackExchange.Redis;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.Identity;
 using Talabat.Core.Repositories.Contract;
 using Talapat.Api.Errors;
 using Talapat.Api.Helpers;
@@ -43,8 +45,12 @@ namespace Talapat.Api
                 var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
                 return ConnectionMultiplexer.Connect(connection);
             });
+            webApplicationBuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
-         
+
+
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             webApplicationBuilder.Services.AddEndpointsApiExplorer();
@@ -85,12 +91,15 @@ namespace Talapat.Api
             var _dbContext = service.GetRequiredService<TalabatDbContext>();
             var _identityDbContext = service.GetRequiredService<ApplicationIdentityDbContext>();
             var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+            var _userManger = service.GetRequiredService<UserManager<ApplicationUser>>();
+
 
             try
             {
                 await _dbContext.Database.MigrateAsync();
                 await _identityDbContext.Database.MigrateAsync();
                 await TalabatDbContextSeed.SeedAsync(_dbContext);
+                await ApplicationIdentityContextSeed.SeeduserAsync(_userManger);
 
             }
             catch (Exception ex)
