@@ -7,13 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
 
-namespace Talapat.Infrastructure.Generic_Repository.Data.Configurations
+namespace Talapat.Infrastructure.Data.Configurations
 {
-    internal class ProductBrandConfiguration : IEntityTypeConfiguration<ProductBrand>
+    internal class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
     {
-        public void Configure(EntityTypeBuilder<ProductBrand> builder)
+        public void Configure(EntityTypeBuilder<ProductCategory> builder)
         {
-            builder.Property(pb => pb.Name)
+            builder.Property(pc => pc.Name)
                    .IsRequired()
                    .HasMaxLength(100);
         }

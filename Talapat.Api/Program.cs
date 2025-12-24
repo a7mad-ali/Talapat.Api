@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
@@ -9,8 +10,9 @@ using Talapat.Api.Errors;
 using Talapat.Api.Helpers;
 using Talapat.Api.Middleware;
 using Talapat.Infrastructure.Basket_Repository;
+using Talapat.Infrastructure.Data;
 using Talapat.Infrastructure.Generic_Repository;
-using Talapat.Infrastructure.Generic_Repository.Data;
+using Talapat.Infrastructure.Identity;
 
 
 namespace Talapat.Api
@@ -28,13 +30,21 @@ namespace Talapat.Api
             // register required api services to DI Container
             webApplicationBuilder.Services.AddDbContext<TalabatDbContext>(options =>
             {
-                options.UseLazyLoadingProxies().UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies().UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"),
+                    
+               sql => sql.MigrationsAssembly("Talapat.Infrastructure"));
             });
+            webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+             options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"),
+               sql => sql.MigrationsAssembly("Talapat.Infrastructure"))
+         );
             webApplicationBuilder.Services.AddScoped<IConnectionMultiplexer>(c =>
             {
                 var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
                 return ConnectionMultiplexer.Connect(connection);
             });
+
+         
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             webApplicationBuilder.Services.AddEndpointsApiExplorer();
@@ -73,11 +83,13 @@ namespace Talapat.Api
 
             var service = scope.ServiceProvider;
             var _dbContext = service.GetRequiredService<TalabatDbContext>();
+            var _identityDbContext = service.GetRequiredService<ApplicationIdentityDbContext>();
             var loggerFactory = service.GetRequiredService<ILoggerFactory>();
 
             try
             {
                 await _dbContext.Database.MigrateAsync();
+                await _identityDbContext.Database.MigrateAsync();
                 await TalabatDbContextSeed.SeedAsync(_dbContext);
 
             }

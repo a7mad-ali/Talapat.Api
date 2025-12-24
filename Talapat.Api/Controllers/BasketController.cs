@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Talabat.Core.Basket;
+using Talabat.Core.Entities.Basket;
 using Talabat.Core.Repositories.Contract;
 using Talapat.Api.DTOs;
 using Talapat.Api.Errors;

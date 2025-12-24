@@ -2,21 +2,27 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Talapat.Infrastructure.Generic_Repository.Data;
+using Talapat.Infrastructure.Data;
 
 #nullable disable
 
-namespace Talapat.Infrastructure.Generic_Repository.Data.Migrations
+namespace Talapat.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TalabatDbContext))]
-    partial class TalabatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251224133006_FreshInitial")]
+    partial class FreshInitial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.21")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

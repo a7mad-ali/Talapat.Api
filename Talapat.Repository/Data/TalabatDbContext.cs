@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Talabat.Core.Entities;
 
-namespace Talapat.Infrastructure.Generic_Repository.Data
+namespace Talapat.Infrastructure.Data
 {
     public class TalabatDbContext : DbContext
     {

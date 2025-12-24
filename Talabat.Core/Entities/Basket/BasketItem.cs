@@ -1,4 +1,4 @@
-﻿namespace Talabat.Core.Basket
+﻿namespace Talabat.Core.Entities.Basket
 {
     public class BasketItem
         {

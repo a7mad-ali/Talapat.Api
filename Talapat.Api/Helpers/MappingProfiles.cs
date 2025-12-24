@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FIXIT.BLL.Helper.PictureUrlResolver;
-using Talabat.Core.Basket;
 using Talabat.Core.Entities;
+using Talabat.Core.Entities.Basket;
 using Talapat.Api.DTOs;
 using Talapat.Api.DTOs.Product;
 
