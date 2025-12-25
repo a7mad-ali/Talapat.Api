@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Talabat.Core.Repositories.Contract;
-
-
-using Talabat.Core.Entities;
-using Talabat.Core.Specifications;
-using AutoMapper;
-using Talapat.Api.DTOs.Product;
 using Microsoft.EntityFrameworkCore;
-using Talapat.Api.Errors;
+using System.Data.Common;
+using Talabat.Core.Entities;
+using Talabat.Core.Repositories.Contract;
+using Talabat.Core.Specifications;
 using Talabat.Core.Specifications.ProductSpecs;
+using Talapat.Api.DTOs.Product;
+using Talapat.Api.Errors;
 using Talapat.Api.Helpers.Pagination;
 
 namespace Talapat.Api.Controllers
@@ -40,6 +41,7 @@ namespace Talapat.Api.Controllers
 
         [ProducesResponseType(typeof(ProductToGetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+            
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToGetDto>>> GetProducts([FromQuery]ProductSpecParams specParams )
         {
