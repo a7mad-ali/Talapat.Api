@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.Core.Entities.Identity;
+using Talabat.Core.Servicies.Contract;
 using Talapat.Api.DTOs;
 using Talapat.Api.Errors;
 
@@ -13,12 +14,16 @@ namespace Talapat.Api.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IAuthService _authServic;
+
         public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IAuthService authServic)
 
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authServic = authServic;
         }
 
         [HttpPost("Login")]
@@ -32,7 +37,7 @@ namespace Talapat.Api.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "FakeToken"
+                Token = await _authServic.CreateTokenAsync(user,_userManager)
 
             });
 
@@ -56,7 +61,7 @@ namespace Talapat.Api.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "FakeToken"
+                Token = await _authServic.CreateTokenAsync(user, _userManager)
             });
         }
     }

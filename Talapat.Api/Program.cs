@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
 using StackExchange.Redis;
 using System.Threading.Tasks;
+using Talabat.Application.AuthService;
 using Talabat.Core.Entities;
 using Talabat.Core.Entities.Identity;
 using Talabat.Core.Repositories.Contract;
+using Talabat.Core.Servicies.Contract;
 using Talapat.Api.Errors;
 using Talapat.Api.Helpers;
 using Talapat.Api.Middleware;
@@ -62,6 +64,7 @@ namespace Talapat.Api
             //webApplicationBuilder.Services.AddScoped<IGenericRepository<ProductCategory>, GenericRepository<ProductCategory>>();
             webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             webApplicationBuilder.Services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
+            webApplicationBuilder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
             //    webApplicationBuilder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
             webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
             webApplicationBuilder.Services.AddAutoMapper(typeof(Program));
