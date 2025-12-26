@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using Talabat.Core.Entities.Identity;
 using Talabat.Core.Servicies.Contract;
 using Talapat.Api.DTOs;
@@ -43,7 +45,7 @@ namespace Talapat.Api.Controllers
 
 
         }
-
+        
         [HttpPost("Register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto model)
         {
@@ -63,6 +65,20 @@ namespace Talapat.Api.Controllers
                 Email = user.Email,
                 Token = await _authServic.CreateTokenAsync(user, _userManager)
             });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email)??string.Empty;
+            var user = await _userManager.FindByEmailAsync(email);
+            return Ok(new UserDto()
+            {
+                DisplayName = user?.DisplayName??string.Empty,
+                Email= user?.Email??string.Empty,
+                Token = await _authServic.CreateTokenAsync(user,_userManager)
+            });
+
         }
     }
 }
