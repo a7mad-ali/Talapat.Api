@@ -7,7 +7,7 @@ namespace Talapat.Api.Extentions
 {
     public static class UserManagerExtentions
     {
-        public static async Task<ApplicationUser?> FindUserWithAddressByEmailAsync
+        public static async Task<ApplicationUser?> FindUserWithAddressAsync
             (this UserManager<ApplicationUser> userManager, ClaimsPrincipal User)
 
         {
