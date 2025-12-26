@@ -2,6 +2,7 @@
 using FIXIT.BLL.Helper.PictureUrlResolver;
 using Talabat.Core.Entities;
 using Talabat.Core.Entities.Basket;
+using Talabat.Core.Entities.Identity;
 using Talapat.Api.DTOs;
 using Talapat.Api.DTOs.Product;
 
@@ -20,6 +21,7 @@ namespace Talapat.Api.Helpers
 
             CreateMap<CustomerBasketDto, CutomerBasket>();
             CreateMap<BasketItemDto, BasketItem>();
+            CreateMap<Address, AddressDto>();
         }
 
     }

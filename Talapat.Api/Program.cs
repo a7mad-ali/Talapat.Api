@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies; // Add this using directive
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,8 @@ namespace Talapat.Api
 
             // Add services to the Dependence Injection container.
 
-            webApplicationBuilder.Services.AddControllers();
+            webApplicationBuilder.Services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             // register required api services to DI Container
             webApplicationBuilder.Services.AddDbContext<TalabatDbContext>(options =>
             {

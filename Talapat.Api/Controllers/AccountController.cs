@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Talabat.Core.Entities.Identity;
 using Talabat.Core.Servicies.Contract;
 using Talapat.Api.DTOs;
 using Talapat.Api.Errors;
+using Talapat.Api.Extentions;
 
 namespace Talapat.Api.Controllers
 {
@@ -17,15 +19,19 @@ namespace Talapat.Api.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IAuthService _authServic;
+        private readonly IMapper _mapper;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IAuthService authServic)
+            IAuthService authServic,
+            IMapper mapper
+            )
 
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _authServic = authServic;
+            _mapper = mapper;
         }
 
         [HttpPost("Login")]
@@ -68,6 +74,7 @@ namespace Talapat.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var email = User.FindFirstValue(ClaimTypes.Email)??string.Empty;
@@ -78,6 +85,18 @@ namespace Talapat.Api.Controllers
                 Email= user?.Email??string.Empty,
                 Token = await _authServic.CreateTokenAsync(user,_userManager)
             });
+
+        }
+
+
+
+        [HttpGet("address")]
+        [Authorize]
+        public async Task<ActionResult<AddressDto>> GetUserAddress()
+        {
+            
+            var user = await _userManager.FindUserWithAddressByEmailAsync(User);
+            return Ok( _mapper.Map<AddressDto>(user.Address));
 
         }
     }
